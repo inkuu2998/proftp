@@ -976,26 +976,23 @@ static void addfile(cmd_rec *cmd, const char *name, const char *suffix,
 
   p = (struct filename *)pcalloc(fpool, sizeof(struct filename));
   p->line = pcalloc(fpool, l + 2);
-  if (opt_1) {
-    char *file_name_no_dir = (char *)malloc(sizeof(name));
-    if (file_name_no_dir == NULL) {
-      pr_log_pri(PR_LOG_ALERT, "Out of memory!");
-      exit(1);
-    }
 
-    if (file_name_no_dir)
-      // 将name的内容复制到line_no_dir
-      strcpy(file_name_no_dir, name);
-    if (rmv_dir_info(file_name_no_dir) != -1) {
-      pr_snprintf(p->line, l + 1, "%s%s", file_name_no_dir, suffix);
-    } else {
-      pr_log_debug(DEBUG0, "fileinfo: name:%s, file_name_no_dir:%s" name,
-                   line_no_dir);
-    }
-    free(file_name_no_dir);
+  if (suffix[0] == '\0') {
+    pr_log_debug(DEBUG0, "suffix is 0(ASCII)");
+  }
+
+  char *file_name_no_dir = pcalloc(fpool, l + 2);
+  pr_snprintf(file_name_no_dir, l + 1, "%s%s", name, suffix);
+
+  if (rmv_dir_info(file_name_no_dir) != -1) {
+    pr_log_debug(DEBUG0, "fileinfo:file_name_no_dir: % s ", file_name_no_dir);
+    pr_snprintf(p->line, l + 1, "%s", file_name_no_dir);
   } else {
     pr_snprintf(p->line, l + 1, "%s%s", name, suffix);
   }
+
+  pr_log_debug(DEBUG0, "l + 1:%d, p->line:%s,%ld", l + 1, p->line,
+               strlen(p->line));
 
   if (tail) {
     tail->down = p;
