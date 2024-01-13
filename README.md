@@ -1,5 +1,8 @@
 # ProFTPD 1.3.x README
 
+# mod_ls
+修改了mod_ls.c, 使其LIST返回不带目录的文件名
+
 ## Status
 
 [![GitHub Actions CI Status](https://github.com/proftpd/proftpd/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/proftpd/proftpd/actions/workflows/ci.yml)
